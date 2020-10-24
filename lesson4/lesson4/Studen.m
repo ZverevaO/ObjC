@@ -16,7 +16,7 @@
         self.name = [name stringByAppendingString: @" "];
         self.surname = [surname stringByAppendingString: @" "];
         self.fullname = [self.name stringByAppendingString: self.surname];
-        self.age = age;
+        _age = age;
         
     }
     return self;
