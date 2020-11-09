@@ -55,15 +55,11 @@
     grid.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
     [self.view addSubview: grid];
     
-    UIImageView *top = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"paddleTop"]];
-    top.frame = CGRectMake(30.0, 40.0, 90.0, 60.0);
-    top.contentMode = UIViewContentModeScaleAspectFit;
+    UIImageView *top = [self createImageView:30.0 withY:40.0 withWidth:90.0 withHeight:60.0 whithName:@"paddleTop"];
     [self.view addSubview:top];
     self.paddleTop = top;
     
-    UIImageView *bottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"paddleBottom"]];
-    bottom.frame = CGRectMake(30.0, SCREEN_HEIGHT - 90.0, 90.0, 60.0);
-    bottom.contentMode = UIViewContentModeScaleAspectFit;
+    UIImageView *bottom = [self createImageView:30.0 withY: (SCREEN_HEIGHT - 90.0) withWidth:90.0 withHeight:60.0 whithName:@"paddleBottom"];
     [self.view addSubview:bottom];
     self.paddleBottom = bottom;
     
@@ -74,22 +70,16 @@
     [self.view addSubview:ball];
     self.ball = ball;
     
-    UILabel *scoreTop = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 70, HALF_SCREEN_HEIGHT - 70, 50, 50)];
-    scoreTop.textColor = [UIColor whiteColor];
-    scoreTop.text = @"0";
-    scoreTop.font = [UIFont systemFontOfSize:40.0 weight:UIFontWeightLight];
-    scoreTop.textAlignment = NSTextAlignmentCenter;
+    UILabel *scoreTop = [self createLabel:(SCREEN_WIDTH - 70) withY:(HALF_SCREEN_HEIGHT - 70) withWidth:50 withHeight:50 whithText:@"0"];
     [self.view addSubview:scoreTop];
     self.scoreTop = scoreTop;
     
-    UILabel *scoreBottom = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 70, HALF_SCREEN_HEIGHT + 20, 50, 50)];
-    scoreBottom.textColor = [UIColor whiteColor];
-    scoreBottom.text = @"0";
-    scoreBottom.font = [UIFont systemFontOfSize:40.0 weight:UIFontWeightLight];
-    scoreBottom.textAlignment = NSTextAlignmentCenter;
+    UILabel *scoreBottom = [self createLabel:(SCREEN_WIDTH - 70) withY:(HALF_SCREEN_HEIGHT + 20) withWidth:50 withHeight:50 whithText:@"0"];
     [self.view addSubview:scoreBottom];
     self.scoreBottom = scoreBottom;
 }
+
+
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     for (UITouch *touch in touches) {
@@ -163,15 +153,27 @@
     self.scoreBottom.text = @"0";
     
     [self displayMessage:@"Готовы к игре?"];
+    
+    [self paddlePlace];
 }
+  
+
+- (void) paddlePlace {
+    
+    self.paddleTop.center = CGPointMake(75.0, 70.0);
+    self.paddleBottom.center = CGPointMake(75.0, 508);
+ }
+
 
 - (int)gameOver {
+    
     if ([self.scoreTop.text intValue] >= MAX_SCORE) return 1;
     if ([self.scoreBottom.text intValue] >= MAX_SCORE) return 2;
     return 0;
 }
 
 - (void)start {
+    
     self.ball.center = CGPointMake(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
     if (!self.timer) {
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(animate) userInfo:nil repeats:YES];
@@ -256,5 +258,22 @@
     return NO;
 }
 
+- (UILabel*)createLabel:(CGFloat) x withY: (CGFloat) y withWidth: (CGFloat) whidth withHeight: (CGFloat) height whithText: (NSString*) text  {
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(x, y, whidth, height)];
+    label.textColor = [UIColor whiteColor];
+    label.text = text;
+    label.font = [UIFont systemFontOfSize:40.0 weight:UIFontWeightLight];
+    label.textAlignment = NSTextAlignmentCenter;
+    return label;
+}
+
+- (UIImageView*)createImageView: (CGFloat) x withY: (CGFloat) y withWidth: (CGFloat) whidth withHeight: (CGFloat) height whithName: (NSString*) nameImage {
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:nameImage]];
+    imageView.frame = CGRectMake(x, y, whidth, height);
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    return  imageView;
+}
 
 @end
